@@ -32,12 +32,7 @@ class AboutSection extends StatelessWidget {
           ),
           const SizedBox(height: 40),
           Text(
-            "I am a passionate Senior Flutter Developer with a strong foundation in mobile application development. "
-            "With over 4 years of experience, I have successfully delivered scalable and high-performance applications "
-            "using Clean Architecture and modern state management solutions like Bloc and Riverpod.\n\n"
-            "While my primary focus is Mobile Development (Android & iOS), I also have extensive experience in building "
-            "responsive Web applications and Desktop applications/tools for Windows using Flutter. "
-            "I believe in writing clean, maintainable, and testable code.",
+            AppConstants.aboutDescription,
             style: const TextStyle(fontSize: 18, height: 1.6),
           ),
         ],
