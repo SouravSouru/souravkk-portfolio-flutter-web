@@ -10,7 +10,7 @@ class Footer extends StatelessWidget {
       alignment: Alignment.center,
       color: Theme.of(context).cardColor,
       child: const Text(
-        "© 2026 Yoush KK. Built with Flutter Web.",
+        "© 2026 Sourav K K. Built with Flutter Web.",
         style: TextStyle(color: Colors.grey),
       ),
     );

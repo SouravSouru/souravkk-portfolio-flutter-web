@@ -42,30 +42,50 @@ class ContactSection extends StatelessWidget {
                 icon: Icons.email,
                 title: "Email",
                 content: AppConstants.email,
-                onTap: () {
-                  // launchUrl(Uri.parse("mailto:${AppConstants.email}"));
+                onTap: () async {
+                  final Uri emailLaunchUri = Uri(
+                    scheme: 'mailto',
+                    path: AppConstants.email,
+                  );
+                  if (await canLaunchUrl(emailLaunchUri)) {
+                    await launchUrl(emailLaunchUri);
+                  }
                 },
               ),
               _ContactCard(
                 icon: Icons.phone,
                 title: "Phone",
                 content: AppConstants.phone,
-                onTap: () {},
+                onTap: () async {
+                  final Uri phoneLaunchUri = Uri(
+                    scheme: 'tel',
+                    path: AppConstants.phone.replaceAll(' ', ''),
+                  );
+                  if (await canLaunchUrl(phoneLaunchUri)) {
+                    await launchUrl(phoneLaunchUri);
+                  }
+                },
               ),
               _ContactCard(
                 icon: FontAwesomeIcons.linkedin,
                 title: "LinkedIn",
                 content: "Connect",
-                onTap: () {
-                  // launchUrl(Uri.parse(AppConstants.linkedinUrl));
+                onTap: () async {
+                  final Uri url = Uri.parse(AppConstants.linkedinUrl);
+                  if (await canLaunchUrl(url)) {
+                    await launchUrl(url, mode: LaunchMode.externalApplication);
+                  }
                 },
               ),
               _ContactCard(
                 icon: FontAwesomeIcons.github,
                 title: "GitHub",
                 content: "Follow",
-                onTap: () {
-                  // launchUrl(Uri.parse(AppConstants.githubUrl));
+                onTap: () async {
+                  final Uri url = Uri.parse(AppConstants.githubUrl);
+                  if (await canLaunchUrl(url)) {
+                    await launchUrl(url, mode: LaunchMode.externalApplication);
+                  }
                 },
               ),
             ],

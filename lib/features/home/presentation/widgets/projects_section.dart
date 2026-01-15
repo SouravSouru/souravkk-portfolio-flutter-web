@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/widgets/responsive_layout.dart';
 import '../../../../core/widgets/entrance_fader.dart';
@@ -99,7 +100,10 @@ class _AppProjectCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Center(
-                  child: _ProjectPhoneMockup(color: theme.primaryColor),
+                  child: _ProjectPhoneMockup(
+                    color: theme.primaryColor,
+                    iconUrl: project.iconUrl,
+                  ),
                 ),
               ),
             ),
@@ -114,11 +118,25 @@ class _AppProjectCard extends StatelessWidget {
                     color: theme.primaryColor,
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  child: const Icon(
-                    Icons.rocket_launch,
-                    color: Colors.white,
-                    size: 30,
-                  ),
+                  child: project.iconUrl != null
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: Image.network(
+                            project.iconUrl!,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) =>
+                                const Icon(
+                                  Icons.rocket_launch,
+                                  color: Colors.white,
+                                  size: 30,
+                                ),
+                          ),
+                        )
+                      : const Icon(
+                          Icons.rocket_launch,
+                          color: Colors.white,
+                          size: 30,
+                        ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
@@ -151,9 +169,19 @@ class _AppProjectCard extends StatelessWidget {
                 ),
                 Column(
                   children: [
-                    _StoreBadge(icon: FontAwesomeIcons.android),
-                    const SizedBox(height: 4),
-                    _StoreBadge(icon: FontAwesomeIcons.apple),
+                    if (project.androidLink != null)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: _StoreBadge(
+                          icon: FontAwesomeIcons.android,
+                          url: project.androidLink!,
+                        ),
+                      ),
+                    if (project.iosLink != null)
+                      _StoreBadge(
+                        icon: FontAwesomeIcons.apple,
+                        url: project.iosLink!,
+                      ),
                   ],
                 ),
               ],
@@ -217,20 +245,34 @@ class _AppProjectCard extends StatelessWidget {
 
 class _StoreBadge extends StatelessWidget {
   final IconData icon;
-  const _StoreBadge({required this.icon});
+  final String url;
+  const _StoreBadge({required this.icon, required this.url});
   @override
   Widget build(BuildContext context) {
-    return Icon(
-      icon,
-      size: 14,
-      color: Theme.of(context).textTheme.bodySmall?.color,
+    return InkWell(
+      onTap: () async {
+        final uri = Uri.parse(url);
+        if (await canLaunchUrl(uri)) {
+          await launchUrl(uri);
+        }
+      },
+      borderRadius: BorderRadius.circular(4),
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: Icon(
+          icon,
+          size: 16,
+          color: Theme.of(context).textTheme.bodySmall?.color,
+        ),
+      ),
     );
   }
 }
 
 class _ProjectPhoneMockup extends StatelessWidget {
   final Color color;
-  const _ProjectPhoneMockup({required this.color});
+  final String? iconUrl;
+  const _ProjectPhoneMockup({required this.color, this.iconUrl});
 
   @override
   Widget build(BuildContext context) {
@@ -255,15 +297,33 @@ class _ProjectPhoneMockup extends StatelessWidget {
             height: 10,
             decoration: const BoxDecoration(color: Colors.black12),
           ),
+
           Expanded(
             child: Container(
               color: color.withOpacity(0.1),
               child: Center(
-                child: Icon(
-                  Icons.apps,
-                  color: color.withOpacity(0.5),
-                  size: 40,
-                ),
+                child: iconUrl != null
+                    ? Image.network(
+                        iconUrl!,
+                        fit: BoxFit.cover,
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Center(
+                            child: CircularProgressIndicator(
+                              value: loadingProgress.expectedTotalBytes != null
+                                  ? loadingProgress.cumulativeBytesLoaded /
+                                        loadingProgress.expectedTotalBytes!
+                                  : null,
+                            ),
+                          );
+                        },
+                        errorBuilder: (context, error, stackTrace) => Icon(
+                          Icons.apps,
+                          color: color.withOpacity(0.5),
+                          size: 40,
+                        ),
+                      )
+                    : Icon(Icons.apps, color: color.withOpacity(0.5), size: 40),
               ),
             ),
           ),

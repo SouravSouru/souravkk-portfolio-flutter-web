@@ -1,5 +1,5 @@
 class AppConstants {
-  static const String name = "Sourav KK";
+  static const String name = "Sourav K K";
   static const String role = "Mobile App Developer";
   static const String summary =
       "Specialized in crafting premium mobile experiences with Flutter. "
@@ -19,10 +19,10 @@ class AppConstants {
 
   static const String cvUrl = "#"; // Placeholder
   static const String email =
-      "contact@youshkk.com"; // Placeholder based on name
-  static const String phone = "+1234567890"; // Placeholder
-  static const String githubUrl = "https://github.com/youshkk";
-  static const String linkedinUrl = "https://linkedin.com/in/youshkk";
+      "souravkk2021@gmail.com"; // Placeholder based on name
+  static const String phone = "+91 8921477978"; // Placeholder
+  static const String githubUrl = "https://github.com/SouravSouru";
+  static const String linkedinUrl = "https://www.linkedin.com/in/sourav-kk/";
 
   static const List<String> primarySkills = [
     "Flutter",
@@ -81,9 +81,16 @@ class AppConstants {
   static const List<ProjectItem> projects = [
     ProjectItem(
       title: "Royal Swiss Auto Services",
-      description: "A premium auto service booking and management application.",
+      description:
+          "Royal Swiss Auto is an easy-to-use app that acts as a bridge between the customers and the service provider to provide hassle-free vehicle maintenance for customers across the UAE. Many luxury car owners would feel this application makes the service or repair appointment easier by just clicking at the one end.",
       techStack: ["Flutter", "Bloc", "Firebase"],
       link: "#",
+      androidLink:
+          "https://play.google.com/store/apps/details?id=com.royalswissapp.swiss&hl=en_IN",
+      iosLink:
+          "https://apps.apple.com/vn/app/royal-swiss-auto-services/id6479524737",
+      iconUrl:
+          "https://play-lh.googleusercontent.com/xwo2uCcq8h_lidVM5HEIicDhsuv3W1PYzFBIStu84_9XpO7AkNFM3lzypLm_r_iWxhjK=w240-h480",
     ),
     ProjectItem(
       title: "Any Rentals",
@@ -131,11 +138,17 @@ class ProjectItem {
   final String description;
   final List<String> techStack;
   final String link;
+  final String? androidLink;
+  final String? iosLink;
+  final String? iconUrl;
 
   const ProjectItem({
     required this.title,
     required this.description,
     required this.techStack,
     required this.link,
+    this.androidLink,
+    this.iosLink,
+    this.iconUrl,
   });
 }
