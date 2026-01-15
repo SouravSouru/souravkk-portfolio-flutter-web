@@ -5,6 +5,6 @@ void main() {
   testWidgets('App renders without crashing', (WidgetTester tester) async {
     await tester.pumpWidget(const MyApp());
     await tester.pumpAndSettle();
-    expect(find.text('<YoushKK />'), findsOneWidget);
+    expect(find.text('<SouravKK />'), findsOneWidget);
   });
 }

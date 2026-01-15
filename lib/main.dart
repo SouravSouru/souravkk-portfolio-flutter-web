@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       child: BlocBuilder<ThemeCubit, ThemeMode>(
         builder: (context, mode) {
           return MaterialApp.router(
-            title: 'Yoush KK - Portfolio',
+            title: 'Sourav K K - Portfolio',
             debugShowCheckedModeBanner: false,
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
