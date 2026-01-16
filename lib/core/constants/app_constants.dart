@@ -157,9 +157,18 @@ class AppConstants {
     ),
     ProjectItem(
       title: "CleanKaro",
-      description: "Suite of service-based applications.",
-      techStack: ["Flutter", "GetIt", "Dio"],
+      description:
+          "The all-in-one solution for modern laundry businesses. Manage orders, billing, drivers, and customers with real-time tracking and powerful BI reporting.",
+      techStack: [
+        "Flutter",
+        "Riverpod",
+        "Dio",
+        "Firebase",
+        "Paytabs Payment Gateway",
+      ],
       link: "#",
+      iconUrl:
+          "https://corsproxy.io/?https://cleankaro.ae/images/logo-blue.png",
     ),
     ProjectItem(
       title: "STGJSC Al Ain",
