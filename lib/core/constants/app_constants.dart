@@ -94,9 +94,14 @@ class AppConstants {
     ),
     ProjectItem(
       title: "Any Rentals",
-      description: "Rental marketplace for equipment and properties.",
+      description:
+          "ANY RENTALS - The ultimate rental marketplace app. Find and book vehicles, planes, event equipment, and more—all in one place. Thousands of listings, best prices, fast search. Your rental solution made simple",
       techStack: ["Flutter", "Riverpod", "REST API"],
       link: "#",
+      androidLink:
+          "https://play.google.com/store/apps/details?id=com.viewydigital.any_rentals&hl=en_IN",
+      iconUrl:
+          "https://play-lh.googleusercontent.com/j5-nq3En-aFPwSwMboB4_vUvxVhFAShQlUOtXOdOCd78L9BwyhQ6D7bRjUO4fTUBCFE=w1024-h1024",
     ),
     ProjectItem(
       title: "MIJSOC Dubai",
