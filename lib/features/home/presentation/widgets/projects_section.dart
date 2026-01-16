@@ -209,7 +209,6 @@ class _AppProjectCard extends StatelessWidget {
                     spacing: 4,
                     runSpacing: 4,
                     children: project.techStack
-                        .take(3)
                         .map(
                           (t) => Container(
                             padding: const EdgeInsets.symmetric(

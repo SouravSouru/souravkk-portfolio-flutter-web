@@ -83,7 +83,15 @@ class AppConstants {
       title: "Royal Swiss Auto Services",
       description:
           "Royal Swiss Auto is an easy-to-use app that acts as a bridge between the customers and the service provider to provide hassle-free vehicle maintenance for customers across the UAE. Many luxury car owners would feel this application makes the service or repair appointment easier by just clicking at the one end.",
-      techStack: ["Flutter", "Bloc", "Firebase"],
+      techStack: [
+        "Flutter",
+        "Getx",
+        "Firebase",
+        "MVC",
+        "Paytabs Payment Gateway",
+        "Google Maps",
+        "Push Notifications",
+      ],
       link: "#",
       androidLink:
           "https://play.google.com/store/apps/details?id=com.royalswissapp.swiss&hl=en_IN",
@@ -92,11 +100,38 @@ class AppConstants {
       iconUrl:
           "https://play-lh.googleusercontent.com/xwo2uCcq8h_lidVM5HEIicDhsuv3W1PYzFBIStu84_9XpO7AkNFM3lzypLm_r_iWxhjK=w240-h480",
     ),
+
+    ProjectItem(
+      title: "QuickAMC",
+      description:
+          "An AMC (Annual Maintenance Contract) service application that streamlines maintenance operations, contract tracking, and service scheduling.",
+      techStack: [
+        "Flutter",
+        "Bloc",
+        "Firebase",
+        "Dio",
+        "Clean Architecture",
+        "Push Notifications",
+        "QR Scanner",
+      ],
+      link: "#",
+      iconUrl:
+          "https://quickamc.com/wp-content/themes/QUICKAMC/assets/img/Logo.png",
+    ),
     ProjectItem(
       title: "Any Rentals",
       description:
           "ANY RENTALS - The ultimate rental marketplace app. Find and book vehicles, planes, event equipment, and more—all in one place. Thousands of listings, best prices, fast search. Your rental solution made simple",
-      techStack: ["Flutter", "Riverpod", "REST API"],
+      techStack: [
+        "Flutter",
+        "Bloc",
+        "REST API",
+        "Paytabs Payment Gateway",
+        "Google Maps",
+        "Push Notifications",
+        "Firebase",
+        "Clean Architecture",
+      ],
       link: "#",
       androidLink:
           "https://play.google.com/store/apps/details?id=com.viewydigital.any_rentals&hl=en_IN",
@@ -105,21 +140,43 @@ class AppConstants {
     ),
     ProjectItem(
       title: "MIJSOC Dubai",
-      description: "Community management app for MIJSOC.",
-      techStack: ["Flutter", "Firebase", "Notifications"],
+      description:
+          "The official app for Mor Ignatius Jacobite Syrian Orthodox Cathedral (MIJSOC) Dubai, affectionately known as 'Manjinikkara in the desert'. Stay spiritually connected with your church community wherever you are.",
+      techStack: [
+        "Flutter",
+        "Firebase",
+        "Notifications",
+        "Bloc",
+        "Clean Architecture",
+      ],
+      link: "#",
+      androidLink:
+          "https://play.google.com/store/apps/details?id=com.viewydigital.mijsocApp",
+      iconUrl:
+          "https://play-lh.googleusercontent.com/UcAGcGT9K8U_AXuGybNag7SQGss1anFr2SbArhsAtkQGLNSdT6sAeI2ppEtDQo1nozA=w1024-h1024",
+    ),
+    ProjectItem(
+      title: "CleanKaro",
+      description: "Suite of service-based applications.",
+      techStack: ["Flutter", "GetIt", "Dio"],
       link: "#",
     ),
     ProjectItem(
       title: "STGJSC Al Ain",
-      description: "Sports club management and event booking.",
-      techStack: ["Flutter", "Provider", "Maps"],
+      description:
+          "The official app for St. George Jacobite Syrian Orthodox Simhasana Church, Al-Ain, UAE. Stay spiritually connected with your church community from anywhere",
+      techStack: [
+        "Flutter",
+        "Firebase",
+        "Notifications",
+        "Bloc",
+        "Clean Architecture",
+      ],
       link: "#",
-    ),
-    ProjectItem(
-      title: "EWFS, WHT, CleanKaro",
-      description: "Suite of service-based applications.",
-      techStack: ["Flutter", "GetIt", "Dio"],
-      link: "#",
+      androidLink:
+          "https://play.google.com/store/apps/details?id=com.viewydigital.stgalainApp&hl=en_IN",
+      iconUrl:
+          "https://play-lh.googleusercontent.com/GPoqxSs1Wg5Tiw0W0Pf5MaFlcg3hf3KvZCMc8K8rmdu-57v-w5FlSpXgKx0xYqVkx9w=w1024-h1024",
     ),
   ];
 }
