@@ -65,7 +65,7 @@ class ProjectsSection extends StatelessWidget {
                 delay: Duration(milliseconds: 100 + (index * 100)),
                 offset: const Offset(0, 50),
                 child: HoverScaleCard(
-                  onTap: () {},
+                  onTap: () => _showProjectDetails(context, project),
                   child: _AppProjectCard(project: project),
                 ),
               );
@@ -111,32 +111,35 @@ class _AppProjectCard extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    color: theme.primaryColor,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: project.iconUrl != null
-                      ? ClipRRect(
-                          borderRadius: BorderRadius.circular(16),
-                          child: Image.network(
-                            project.iconUrl!,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) =>
-                                const Icon(
-                                  Icons.rocket_launch,
-                                  color: Colors.white,
-                                  size: 30,
-                                ),
+                Hero(
+                  tag: 'project_icon_${project.title}',
+                  child: Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      color: theme.primaryColor,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: project.iconUrl != null
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(16),
+                            child: Image.network(
+                              project.iconUrl!,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  const Icon(
+                                    Icons.rocket_launch,
+                                    color: Colors.white,
+                                    size: 30,
+                                  ),
+                            ),
+                          )
+                        : const Icon(
+                            Icons.rocket_launch,
+                            color: Colors.white,
+                            size: 30,
                           ),
-                        )
-                      : const Icon(
-                          Icons.rocket_launch,
-                          color: Colors.white,
-                          size: 30,
-                        ),
+                  ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
@@ -163,6 +166,18 @@ class _AppProjectCard extends StatelessWidget {
                         ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 4),
+                      InkWell(
+                        onTap: () => _showProjectDetails(context, project),
+                        child: Text(
+                          "Read More",
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: theme.primaryColor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -194,7 +209,6 @@ class _AppProjectCard extends StatelessWidget {
                     spacing: 4,
                     runSpacing: 4,
                     children: project.techStack
-                        .take(3)
                         .map(
                           (t) => Container(
                             padding: const EdgeInsets.symmetric(
@@ -331,4 +345,232 @@ class _ProjectPhoneMockup extends StatelessWidget {
       ),
     );
   }
+}
+
+void _showProjectDetails(BuildContext context, ProjectItem project) {
+  final theme = Theme.of(context);
+  showGeneralDialog(
+    context: context,
+    barrierDismissible: true,
+    barrierLabel: 'Project Details',
+    transitionDuration: const Duration(milliseconds: 300),
+    pageBuilder: (context, animation, secondaryAnimation) {
+      return Center(
+        child: Material(
+          color: Colors.transparent,
+          child: Container(
+            width: ResponsiveLayout.isMobile(context)
+                ? MediaQuery.of(context).size.width * 0.9
+                : 500,
+            margin: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: theme.cardColor,
+              borderRadius: BorderRadius.circular(24),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  blurRadius: 20,
+                  offset: const Offset(0, 10),
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Header with Hero Icon
+                Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Row(
+                    children: [
+                      Hero(
+                        tag: 'project_icon_${project.title}',
+                        child: Container(
+                          width: 60,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            color: theme.primaryColor,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: project.iconUrl != null
+                              ? ClipRRect(
+                                  borderRadius: BorderRadius.circular(16),
+                                  child: Image.network(
+                                    project.iconUrl!,
+                                    fit: BoxFit.cover,
+                                  ),
+                                )
+                              : const Icon(
+                                  Icons.rocket_launch,
+                                  color: Colors.white,
+                                  size: 30,
+                                ),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              project.title,
+                              style: const TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            if (project.techStack.isNotEmpty) ...[
+                              const SizedBox(height: 4),
+                              Text(
+                                project.techStack.take(3).join(" • "),
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: theme.primaryColor,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ],
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () => Navigator.pop(context),
+                        icon: const Icon(Icons.close),
+                      ),
+                    ],
+                  ),
+                ),
+                const Divider(height: 1),
+                // Content
+                Flexible(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(24),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "About",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: theme.textTheme.bodyLarge?.color,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          project.description,
+                          style: TextStyle(
+                            fontSize: 15,
+                            height: 1.5,
+                            color: theme.textTheme.bodyMedium?.color
+                                ?.withOpacity(0.8),
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        Text(
+                          "Technologies",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: theme.textTheme.bodyLarge?.color,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: project.techStack
+                              .map(
+                                (t) => Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 6,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: theme.colorScheme.secondary
+                                        .withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(20),
+                                    border: Border.all(
+                                      color: theme.colorScheme.secondary
+                                          .withOpacity(0.2),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    t,
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: theme.colorScheme.secondary,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                              )
+                              .toList(),
+                        ),
+                        const SizedBox(height: 32),
+                        if (project.androidLink != null ||
+                            project.iosLink != null)
+                          Row(
+                            children: [
+                              if (project.androidLink != null)
+                                Expanded(
+                                  child: ElevatedButton.icon(
+                                    onPressed: () => launchUrl(
+                                      Uri.parse(project.androidLink!),
+                                    ),
+                                    icon: const Icon(
+                                      FontAwesomeIcons.googlePlay,
+                                      size: 16,
+                                    ),
+                                    label: const Text("Play Store"),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.green,
+                                      foregroundColor: Colors.white,
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 16,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              if (project.androidLink != null &&
+                                  project.iosLink != null)
+                                const SizedBox(width: 16),
+                              if (project.iosLink != null)
+                                Expanded(
+                                  child: ElevatedButton.icon(
+                                    onPressed: () =>
+                                        launchUrl(Uri.parse(project.iosLink!)),
+                                    icon: const Icon(
+                                      FontAwesomeIcons.appStore,
+                                      size: 16,
+                                    ),
+                                    label: const Text("App Store"),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.blue,
+                                      foregroundColor: Colors.white,
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 16,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    },
+    transitionBuilder: (context, animation, secondaryAnimation, child) {
+      return ScaleTransition(
+        scale: CurvedAnimation(parent: animation, curve: Curves.easeOutBack),
+        child: FadeTransition(opacity: animation, child: child),
+      );
+    },
+  );
 }
