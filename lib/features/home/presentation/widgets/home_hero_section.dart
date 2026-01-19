@@ -4,7 +4,9 @@ import '../../../../core/widgets/responsive_layout.dart';
 import '../../../../core/widgets/entrance_fader.dart';
 
 class HomeHeroSection extends StatelessWidget {
-  const HomeHeroSection({super.key});
+  final VoidCallback? onViewAppsTap;
+
+  const HomeHeroSection({super.key, this.onViewAppsTap});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +24,7 @@ class HomeHeroSection extends StatelessWidget {
                 EntranceFader(
                   offset: Offset(0, 20),
                   duration: Duration(milliseconds: 500),
-                  child: _HeroTextContent(),
+                  child: _HeroTextContent(onViewAppsTap: onViewAppsTap),
                 ),
                 SizedBox(height: 60),
                 EntranceFader(
@@ -38,7 +40,7 @@ class HomeHeroSection extends StatelessWidget {
                 Expanded(
                   child: EntranceFader(
                     offset: Offset(0, -20),
-                    child: _HeroTextContent(),
+                    child: _HeroTextContent(onViewAppsTap: onViewAppsTap),
                   ),
                 ),
                 Expanded(
@@ -55,7 +57,9 @@ class HomeHeroSection extends StatelessWidget {
 }
 
 class _HeroTextContent extends StatelessWidget {
-  const _HeroTextContent();
+  final VoidCallback? onViewAppsTap;
+
+  const _HeroTextContent({this.onViewAppsTap});
 
   @override
   Widget build(BuildContext context) {
@@ -116,9 +120,7 @@ class _HeroTextContent extends StatelessWidget {
             runSpacing: 20,
             children: [
               ElevatedButton(
-                onPressed: () {
-                  // Scroll to projects
-                },
+                onPressed: onViewAppsTap,
                 child: const Text("View Apps"),
               ),
               OutlinedButton(

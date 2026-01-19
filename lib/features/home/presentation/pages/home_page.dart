@@ -7,6 +7,7 @@ import '../widgets/projects_section.dart';
 import '../widgets/contact_section.dart';
 import '../widgets/nav_bar.dart';
 import '../widgets/footer.dart';
+import '../widgets/mobile_drawer.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -30,6 +31,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: MobileDrawer(onNavTap: _scrollToSection),
       body: Column(
         children: [
           NavBar(onNavTap: _scrollToSection),
@@ -40,7 +42,9 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   KeyedSubtree(
                     key: _sectionKeys[0],
-                    child: const HomeHeroSection(),
+                    child: HomeHeroSection(
+                      onViewAppsTap: () => _scrollToSection(4),
+                    ),
                   ),
                   KeyedSubtree(
                     key: _sectionKeys[1],
