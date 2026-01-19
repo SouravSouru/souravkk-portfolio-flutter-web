@@ -3,9 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/theme_cubit.dart';
 import '../../../../core/widgets/responsive_layout.dart';
 import '../../../../core/widgets/entrance_fader.dart';
+import '../../../../core/constants/app_constants.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class NavBar extends StatelessWidget {
-  const NavBar({super.key});
+  final Function(int) onNavTap;
+
+  const NavBar({super.key, required this.onNavTap});
 
   @override
   Widget build(BuildContext context) {
@@ -29,32 +33,35 @@ class NavBar extends StatelessWidget {
                 EntranceFader(
                   delay: const Duration(milliseconds: 100),
                   offset: const Offset(0, -10),
-                  child: _NavItem(title: "Home", onTap: () {}),
-                ), // Fixed onTap later
+                  child: _NavItem(title: "Home", onTap: () => onNavTap(0)),
+                ),
                 EntranceFader(
                   delay: const Duration(milliseconds: 150),
                   offset: const Offset(0, -10),
-                  child: _NavItem(title: "About", onTap: () {}),
+                  child: _NavItem(title: "About", onTap: () => onNavTap(1)),
                 ),
                 EntranceFader(
                   delay: const Duration(milliseconds: 200),
                   offset: const Offset(0, -10),
-                  child: _NavItem(title: "Skills", onTap: () {}),
+                  child: _NavItem(title: "Skills", onTap: () => onNavTap(2)),
                 ),
                 EntranceFader(
                   delay: const Duration(milliseconds: 250),
                   offset: const Offset(0, -10),
-                  child: _NavItem(title: "Experience", onTap: () {}),
+                  child: _NavItem(
+                    title: "Experience",
+                    onTap: () => onNavTap(3),
+                  ),
                 ),
                 EntranceFader(
                   delay: const Duration(milliseconds: 300),
                   offset: const Offset(0, -10),
-                  child: _NavItem(title: "Projects", onTap: () {}),
+                  child: _NavItem(title: "Projects", onTap: () => onNavTap(4)),
                 ),
                 EntranceFader(
                   delay: const Duration(milliseconds: 350),
                   offset: const Offset(0, -10),
-                  child: _NavItem(title: "Contact", onTap: () {}),
+                  child: _NavItem(title: "Contact", onTap: () => onNavTap(5)),
                 ),
                 const SizedBox(width: 20),
                 EntranceFader(
@@ -86,8 +93,11 @@ class NavBar extends StatelessWidget {
                   delay: const Duration(milliseconds: 450),
                   offset: const Offset(0, -10),
                   child: ElevatedButton(
-                    onPressed: () {
-                      // launchUrl(Uri.parse(AppConstants.cvUrl));
+                    onPressed: () async {
+                      final Uri url = Uri.parse(AppConstants.cvUrl);
+                      if (await canLaunchUrl(url)) {
+                        await launchUrl(url);
+                      }
                     },
                     child: const Text("Resume"),
                   ),

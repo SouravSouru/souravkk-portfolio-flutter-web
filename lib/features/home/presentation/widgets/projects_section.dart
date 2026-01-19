@@ -117,13 +117,13 @@ class _AppProjectCard extends StatelessWidget {
                     width: 60,
                     height: 60,
                     decoration: BoxDecoration(
-                      color: theme.primaryColor,
+                      color: Colors.white,
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: project.iconUrl != null
                         ? ClipRRect(
                             borderRadius: BorderRadius.circular(16),
-                            child: Image.network(
+                            child: Image.asset(
                               project.iconUrl!,
                               fit: BoxFit.cover,
                               errorBuilder: (context, error, stackTrace) =>
@@ -317,20 +317,9 @@ class _ProjectPhoneMockup extends StatelessWidget {
               color: color.withOpacity(0.1),
               child: Center(
                 child: iconUrl != null
-                    ? Image.network(
+                    ? Image.asset(
                         iconUrl!,
                         fit: BoxFit.cover,
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) return child;
-                          return Center(
-                            child: CircularProgressIndicator(
-                              value: loadingProgress.expectedTotalBytes != null
-                                  ? loadingProgress.cumulativeBytesLoaded /
-                                        loadingProgress.expectedTotalBytes!
-                                  : null,
-                            ),
-                          );
-                        },
                         errorBuilder: (context, error, stackTrace) => Icon(
                           Icons.apps,
                           color: color.withOpacity(0.5),
@@ -395,7 +384,7 @@ void _showProjectDetails(BuildContext context, ProjectItem project) {
                           child: project.iconUrl != null
                               ? ClipRRect(
                                   borderRadius: BorderRadius.circular(16),
-                                  child: Image.network(
+                                  child: Image.asset(
                                     project.iconUrl!,
                                     fit: BoxFit.cover,
                                   ),

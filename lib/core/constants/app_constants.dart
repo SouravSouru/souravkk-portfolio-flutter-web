@@ -97,8 +97,7 @@ class AppConstants {
           "https://play.google.com/store/apps/details?id=com.royalswissapp.swiss&hl=en_IN",
       iosLink:
           "https://apps.apple.com/vn/app/royal-swiss-auto-services/id6479524737",
-      iconUrl:
-          "https://play-lh.googleusercontent.com/xwo2uCcq8h_lidVM5HEIicDhsuv3W1PYzFBIStu84_9XpO7AkNFM3lzypLm_r_iWxhjK=w240-h480",
+      iconUrl: "assets/royal_swiss_auto.jpg",
     ),
 
     ProjectItem(
@@ -115,8 +114,7 @@ class AppConstants {
         "QR Scanner",
       ],
       link: "#",
-      iconUrl:
-          "https://quickamc.com/wp-content/themes/QUICKAMC/assets/img/Logo.png",
+      iconUrl: "assets/quickAMC.png",
     ),
     ProjectItem(
       title: "Any Rentals",
@@ -135,8 +133,7 @@ class AppConstants {
       link: "#",
       androidLink:
           "https://play.google.com/store/apps/details?id=com.viewydigital.any_rentals&hl=en_IN",
-      iconUrl:
-          "https://play-lh.googleusercontent.com/j5-nq3En-aFPwSwMboB4_vUvxVhFAShQlUOtXOdOCd78L9BwyhQ6D7bRjUO4fTUBCFE=w1024-h1024",
+      iconUrl: "assets/any_rental_app_icon.jpg",
     ),
     ProjectItem(
       title: "MIJSOC Dubai",
@@ -152,8 +149,7 @@ class AppConstants {
       link: "#",
       androidLink:
           "https://play.google.com/store/apps/details?id=com.viewydigital.mijsocApp",
-      iconUrl:
-          "https://play-lh.googleusercontent.com/UcAGcGT9K8U_AXuGybNag7SQGss1anFr2SbArhsAtkQGLNSdT6sAeI2ppEtDQo1nozA=w1024-h1024",
+      iconUrl: "assets/MIJSOC.png",
     ),
     ProjectItem(
       title: "CleanKaro",
@@ -167,8 +163,7 @@ class AppConstants {
         "Paytabs Payment Gateway",
       ],
       link: "#",
-      iconUrl:
-          "https://corsproxy.io/?https://cleankaro.ae/images/logo-blue.png",
+      iconUrl: "assets/cleankaro.png",
     ),
     ProjectItem(
       title: "STGJSC Al Ain",
@@ -184,8 +179,7 @@ class AppConstants {
       link: "#",
       androidLink:
           "https://play.google.com/store/apps/details?id=com.viewydigital.stgalainApp&hl=en_IN",
-      iconUrl:
-          "https://play-lh.googleusercontent.com/GPoqxSs1Wg5Tiw0W0Pf5MaFlcg3hf3KvZCMc8K8rmdu-57v-w5FlSpXgKx0xYqVkx9w=w1024-h1024",
+      iconUrl: "assets/STGJSC.png",
     ),
   ];
 }
