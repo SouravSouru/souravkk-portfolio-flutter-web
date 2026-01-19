@@ -378,7 +378,7 @@ void _showProjectDetails(BuildContext context, ProjectItem project) {
                           width: 60,
                           height: 60,
                           decoration: BoxDecoration(
-                            color: theme.primaryColor,
+                            color: Colors.white,
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: project.iconUrl != null
