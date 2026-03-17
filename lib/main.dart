@@ -14,11 +14,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => ThemeCubit(),
+      create: (_) => ThemeCubit()..setDark(), // Default to dark mode
       child: BlocBuilder<ThemeCubit, ThemeMode>(
         builder: (context, mode) {
           return MaterialApp.router(
-            title: 'Sourav K K - Portfolio',
+            title: 'Sourav K K — Flutter Developer Portfolio',
             debugShowCheckedModeBanner: false,
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
