@@ -92,10 +92,7 @@ class _ContactSectionState extends State<ContactSection>
   }
 
   void _openDirectEmail() async {
-    final uri = Uri(
-      scheme: 'mailto',
-      path: AppConstants.email,
-    );
+    final uri = Uri(scheme: 'mailto', path: AppConstants.email);
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri);
     }
@@ -700,10 +697,7 @@ class _SuccessCard extends StatelessWidget {
             duration: const Duration(milliseconds: 500),
             curve: Curves.elasticOut,
             builder: (context, value, child) {
-              return Transform.scale(
-                scale: value,
-                child: child,
-              );
+              return Transform.scale(scale: value, child: child);
             },
             child: Container(
               width: 72,

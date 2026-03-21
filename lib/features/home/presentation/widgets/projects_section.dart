@@ -123,9 +123,9 @@ class _ProjectsSectionState extends State<ProjectsSection>
               physics: const NeverScrollableScrollPhysics(),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: isDesktop ? 3 : (isMobile ? 1 : 2),
-                childAspectRatio: isDesktop ? 0.78 : (isMobile ? 1.1 : 0.85),
-                crossAxisSpacing: 20,
-                mainAxisSpacing: 20,
+                mainAxisExtent: 340,
+                crossAxisSpacing: isMobile ? 16 : 24,
+                mainAxisSpacing: isMobile ? 16 : 24,
               ),
               itemCount: _filteredProjects.length,
               itemBuilder: (context, index) {
@@ -314,31 +314,31 @@ class _ProjectCardState extends State<_ProjectCard>
           ),
           child: Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(24),
               color: widget.isDark ? AppColors.bgCard : Colors.white,
               border: Border.all(
                 color: _hovered
-                    ? const Color(0xFF4F46E5).withOpacity(0.3)
+                    ? const Color(0xFF4F46E5).withOpacity(0.4)
                     : (widget.isDark ? AppColors.border : AppColors.lightBorder),
               ),
               boxShadow: [
                 BoxShadow(
                   color: _hovered
-                      ? const Color(0xFF4F46E5).withOpacity(0.15)
-                      : Colors.black.withOpacity(widget.isDark ? 0.3 : 0.06),
-                  blurRadius: _hovered ? 32 : 12,
+                      ? const Color(0xFF4F46E5).withOpacity(0.2)
+                      : Colors.black.withOpacity(widget.isDark ? 0.4 : 0.05),
+                  blurRadius: _hovered ? 32 : 16,
                   offset: const Offset(0, 8),
                 ),
               ],
             ),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(24),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Image / Preview area
                   Expanded(
-                    flex: 5,
+                    flex: 9,
                     child: _ProjectImageArea(
                       project: widget.project,
                       overlayOpacity: _overlayOpacity,
@@ -348,9 +348,9 @@ class _ProjectCardState extends State<_ProjectCard>
 
                   // Content area
                   Expanded(
-                    flex: 4,
+                    flex: 10,
                     child: Padding(
-                      padding: const EdgeInsets.all(20),
+                      padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -385,19 +385,22 @@ class _ProjectCardState extends State<_ProjectCard>
                             children: widget.project.techStack.take(3).map((t) {
                               return Container(
                                 padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 3,
+                                  horizontal: 10,
+                                  vertical: 4,
                                 ),
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(4),
-                                  color: const Color(0xFF4F46E5).withOpacity(0.08),
+                                  borderRadius: BorderRadius.circular(6),
+                                  color: widget.isDark 
+                                      ? const Color(0xFF4F46E5).withOpacity(0.15)
+                                      : const Color(0xFF4F46E5).withOpacity(0.08),
                                 ),
                                 child: Text(
                                   t,
-                                  style: const TextStyle(
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.w600,
-                                    color: Color(0xFF4F46E5),
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w700,
+                                    letterSpacing: 0.5,
+                                    color: widget.isDark ? const Color(0xFFA5B4FC) : const Color(0xFF4F46E5),
                                   ),
                                 ),
                               );
@@ -483,39 +486,44 @@ class _ProjectImageArea extends StatelessWidget {
 
         // App icon
         Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: 80,
-                height: 80,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.15),
-                      blurRadius: 20,
-                      offset: const Offset(0, 8),
-                    ),
-                  ],
+          child: AnimatedBuilder(
+            animation: overlayOpacity,
+            builder: (context, child) => Transform.translate(
+              offset: Offset(0, -overlayOpacity.value * 10),
+              child: child,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 64,
+                  height: 64,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 24,
+                        offset: const Offset(0, 10),
+                      ),
+                    ],
+                  ),
+                  child: project.iconUrl != null
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: Image.asset(
+                            project.iconUrl!,
+                            fit: BoxFit.cover,
+                            cacheWidth: 128,
+                            cacheHeight: 128,
+                            errorBuilder: (_, __, ___) =>
+                                _DefaultIcon(isDark: isDark),
+                          ),
+                        )
+                      : _DefaultIcon(isDark: isDark),
                 ),
-                child: project.iconUrl != null
-                    ? ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: Image.asset(
-                          project.iconUrl!,
-                          fit: BoxFit.cover,
-                          // Optimize decoding memory size (rendered at 80x80)
-                          // 160 allows high DPI screens to look crisp without massive memory usage
-                          cacheWidth: 160,
-                          cacheHeight: 160,
-                          errorBuilder: (_, __, ___) =>
-                              _DefaultIcon(isDark: isDark),
-                        ),
-                      )
-                    : _DefaultIcon(isDark: isDark),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
 
