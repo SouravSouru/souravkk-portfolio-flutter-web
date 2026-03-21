@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/services/email_service.dart';
 import '../../../../core/widgets/responsive_layout.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/gradient_button.dart';
@@ -25,6 +24,8 @@ class _ContactSectionState extends State<ContactSection>
   final _messageController = TextEditingController();
   bool _submitted = false;
   bool _isLoading = false;
+  bool _usedFallback = false;
+  String _resultMessage = '';
 
   @override
   void initState() {
@@ -53,47 +54,62 @@ class _ContactSectionState extends State<ContactSection>
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
 
-      try {
-        // Send email via a free service like Formspree
-        // IMPORTANT: Replace the URL below with your actual Formspree endpoint that looks like:
-        // https://formspree.io/f/xabcdefg
-        final response = await http.post(
-          Uri.parse(
-            'https://formspree.io/f/xyzxyzxyz',
-          ), // <-- INSERT YOUR ID HERE
-          headers: {'Content-Type': 'application/json'},
-          body: jsonEncode({
-            'name': _nameController.text,
-            'email': _emailController.text,
-            'message': _messageController.text,
-          }),
-        );
+      final result = await EmailService.sendEmail(
+        name: _nameController.text.trim(),
+        email: _emailController.text.trim(),
+        message: _messageController.text.trim(),
+      );
 
-        if (response.statusCode >= 200 && response.statusCode < 300) {
-          if (mounted) {
-            setState(() {
-              _submitted = true;
-              _isLoading = false;
-            });
-          }
-        } else {
-          throw Exception('Failed to send message');
-        }
-      } catch (e) {
-        if (mounted) {
-          setState(() => _isLoading = false);
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text(
-                'Failed to send message. Please email me directly.',
-              ),
-              backgroundColor: Colors.redAccent,
-              behavior: SnackBarBehavior.floating,
+      if (!mounted) return;
+
+      if (result.success) {
+        setState(() {
+          _submitted = true;
+          _isLoading = false;
+          _usedFallback = result.usedFallback;
+          _resultMessage = result.message;
+        });
+      } else {
+        setState(() => _isLoading = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(result.message),
+            backgroundColor: Colors.redAccent,
+            behavior: SnackBarBehavior.floating,
+            duration: const Duration(seconds: 5),
+            action: SnackBarAction(
+              label: 'Copy Email',
+              textColor: Colors.white,
+              onPressed: () {
+                // Fallback: let them email directly
+                _openDirectEmail();
+              },
             ),
-          );
-        }
+          ),
+        );
       }
     }
+  }
+
+  void _openDirectEmail() async {
+    final uri = Uri(
+      scheme: 'mailto',
+      path: AppConstants.email,
+    );
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    }
+  }
+
+  void _resetForm() {
+    setState(() {
+      _submitted = false;
+      _usedFallback = false;
+      _resultMessage = '';
+      _nameController.clear();
+      _emailController.clear();
+      _messageController.clear();
+    });
   }
 
   @override
@@ -267,7 +283,12 @@ class _ContactSectionState extends State<ContactSection>
 
   Widget _buildForm(BuildContext context, bool isDark) {
     if (_submitted) {
-      return _SuccessCard(isDark: isDark);
+      return _SuccessCard(
+        isDark: isDark,
+        usedFallback: _usedFallback,
+        message: _resultMessage,
+        onSendAnother: _resetForm,
+      );
     }
 
     return Form(
@@ -639,53 +660,144 @@ class _SocialIconButtonState extends State<_SocialIconButton> {
 
 class _SuccessCard extends StatelessWidget {
   final bool isDark;
-  const _SuccessCard({required this.isDark});
+  final bool usedFallback;
+  final String message;
+  final VoidCallback onSendAnother;
+
+  const _SuccessCard({
+    required this.isDark,
+    this.usedFallback = false,
+    this.message = '',
+    required this.onSendAnother,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final accentColor = usedFallback
+        ? const Color(0xFF4F46E5)
+        : const Color(0xFF3FB950);
+
     return Container(
       padding: const EdgeInsets.all(48),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: isDark ? AppColors.bgCard : Colors.white,
-        border: Border.all(color: const Color(0xFF3FB950).withOpacity(0.3)),
+        border: Border.all(color: accentColor.withOpacity(0.3)),
+        boxShadow: [
+          BoxShadow(
+            color: accentColor.withOpacity(isDark ? 0.08 : 0.04),
+            blurRadius: 24,
+            offset: const Offset(0, 8),
+          ),
+        ],
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
-            width: 64,
-            height: 64,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: const Color(0xFF3FB950).withOpacity(0.12),
-              border: Border.all(
-                color: const Color(0xFF3FB950).withOpacity(0.3),
+          // Animated checkmark icon
+          TweenAnimationBuilder<double>(
+            tween: Tween(begin: 0.0, end: 1.0),
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.elasticOut,
+            builder: (context, value, child) {
+              return Transform.scale(
+                scale: value,
+                child: child,
+              );
+            },
+            child: Container(
+              width: 72,
+              height: 72,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: LinearGradient(
+                  colors: [
+                    accentColor.withOpacity(0.15),
+                    accentColor.withOpacity(0.05),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                border: Border.all(
+                  color: accentColor.withOpacity(0.3),
+                  width: 2,
+                ),
+              ),
+              child: Icon(
+                usedFallback ? Icons.email_rounded : Icons.check_rounded,
+                color: accentColor,
+                size: 32,
               ),
             ),
-            child: const Icon(
-              Icons.check_rounded,
-              color: Color(0xFF3FB950),
-              size: 32,
-            ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 24),
+
+          // Title
           Text(
-            'Message Sent!',
+            usedFallback ? 'Almost There!' : 'Message Sent!',
             style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w700,
+              fontSize: 24,
+              fontWeight: FontWeight.w800,
+              letterSpacing: -0.5,
               color: isDark ? AppColors.textPrimary : AppColors.bgDeep,
             ),
           ),
           const SizedBox(height: 12),
+
+          // Description
           Text(
-            "Thanks for reaching out. I'll get back to you as soon as possible.",
+            message.isNotEmpty
+                ? message
+                : "Thanks for reaching out. I'll get back to you as soon as possible.",
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 15,
               height: 1.6,
               color: isDark ? AppColors.textSecondary : const Color(0xFF6B7280),
+            ),
+          ),
+          const SizedBox(height: 32),
+
+          // Send another message button
+          MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: GestureDetector(
+              onTap: onSendAnother,
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 12,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: isDark ? AppColors.border : AppColors.lightBorder,
+                  ),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.refresh_rounded,
+                      size: 16,
+                      color: isDark
+                          ? AppColors.textSecondary
+                          : const Color(0xFF6B7280),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Send Another Message',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: isDark
+                            ? AppColors.textSecondary
+                            : const Color(0xFF6B7280),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         ],
